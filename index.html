@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Portal de Entrevistas Grupales</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="assets/slots.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <h1 class="brand-title">Talento Gastronómico</h1>
+          <p class="brand-sub">Reclutamiento de Equipos</p>
+        </div>
+      </div>
+      <nav class="view-switch" aria-label="Selector de vista">
+        <button id="tab-candidate" class="tab-btn active" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          Candidatos
+        </button>
+        <button id="tab-admin" class="tab-btn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Panel Admin
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-viewport">
+    <!-- VISTA CANDIDATO (Mobile-First) -->
+    <section id="candidate-view" class="view-panel is-active">
+      <div class="mobile-shell">
+        <!-- Stepper -->
+        <div class="stepper-nav" aria-label="Pasos de postulación">
+          <div class="step-indicator is-current" data-step="1">
+            <span class="step-num">1</span>
+            <span class="step-label">Datos</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step-indicator" data-step="2">
+            <span class="step-num">2</span>
+            <span class="step-label">Foto</span>
+          </div>
+          <div class="step-line"></div>
+          <div class="step-indicator" data-step="3">
+            <span class="step-num">3</span>
+            <span class="step-label">Turno</span>
+          </div>
+        </div>
+
+        <!-- Paso 1: Formulario -->
+        <div id="step-1" class="step-content is-active">
+          <div class="slot" data-slot="hero-postulacion" data-desc="Equipo gastronómico coordinando la jornada de entrevistas"></div>
+
+          <div class="step-intro">
+            <h2 class="step-title">Registro de Candidato</h2>
+            <p class="step-desc">Completá tus datos para ser considerado en la jornada grupal de selección.</p>
+          </div>
+
+          <form id="form-candidate-data" class="flow-form" novalidate>
+            <div class="field-group">
+              <label for="candidate-dni">DNI / Documento</label>
+              <input type="number" id="candidate-dni" name="dni" placeholder="Ej. 38450123" inputmode="numeric" required min="1000000" max="99999999">
+              <span class="field-hint">Ingresá sólo números sin puntos.</span>
+            </div>
+
+            <div class="field-group">
+              <label for="candidate-name">Nombre y Apellido</label>
+              <input type="text" id="candidate-name" name="full_name" placeholder="Ej. Valentina Rossi" required minlength="4">
+            </div>
+
+            <div class="field-group">
+              <label for="candidate-age">Edad</label>
+              <input type="number" id="candidate-age" name="age" placeholder="Ej. 24" inputmode="numeric" required min="18" max="70">
+            </div>
+
+            <div class="field-group">
+              <label for="candidate-role">Puesto de Trabajo</label>
+              <div class="select-wrapper">
+                <select id="candidate-role" name="role" required>
+                  <option value="" disabled selected>Seleccioná un puesto</option>
+                  <option value="Encargado">Encargado de Salón</option>
+                  <option value="Mozo">Mozo / Camarero</option>
+                  <option value="Pizzero">Pizzero</option>
+                  <option value="Barista">Barista Especialista</option>
+                  <option value="Bachero">Bachero / Asistente de Cocina</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-block">
+                Continuar a la Selfie
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Paso 2: Cámara y Selfie -->
+        <div id="step-2" class="step-content">
+          <div class="step-intro">
+            <h2 class="step-title">Foto de Perfil</h2>
+            <p class="step-desc">Una foto clara de tu rostro ayuda al equipo evaluador a reconocerte en la sala.</p>
+          </div>
+
+          <div class="camera-widget">
+            <div class="camera-frame" id="camera-frame">
+              <video id="webcam-video" autoplay playsinline muted></video>
+              <canvas id="webcam-canvas" class="hidden-canvas"></canvas>
+              <div id="photo-preview-box" class="photo-preview-box is-hidden"></div>
+              <div class="camera-overlay-guide" id="camera-guide">
+                <div class="face-oval"></div>
+                <span>Alineá tu rostro en el centro</span>
+              </div>
+            </div>
+
+            <div id="camera-status-msg" class="status-msg">Cargando vista previa de cámara...</div>
+
+            <div class="camera-controls">
+              <button type="button" id="btn-snap-photo" class="btn btn-camera">
+                <span class="shutter-ring"><span class="shutter-dot"></span></span>
+                Capturar Foto
+              </button>
+              <button type="button" id="btn-retake-photo" class="btn btn-outline is-hidden">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                Volver a Tomar
+              </button>
+              <button type="button" id="btn-sim-avatar" class="btn btn-ghost">
+                Usar Avatar Rápido Demo
+              </button>
+            </div>
+          </div>
+
+          <div class="form-actions dual-actions">
+            <button type="button" id="btn-back-step-1" class="btn btn-ghost">Atrás</button>
+            <button type="button" id="btn-to-step-3" class="btn btn-primary" disabled>
+              Siguiente: Elegir Turno
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 3: Selector de Turno y Cupos -->
+        <div id="step-3" class="step-content">
+          <div class="step-intro">
+            <h2 class="step-title">Elegí tu Turno</h2>
+            <p class="step-desc">Entrevistas grupales presenciales. Máximo <strong>6 personas</strong> por bloque.</p>
+          </div>
+
+          <div class="date-selector-wrapper">
+            <label for="candidate-date-picker">Fecha de la Jornada</label>
+            <input type="date" id="candidate-date-picker" class="styled-date-input">
+          </div>
+
+          <div class="slots-header-info">
+            <span class="slots-summary-label">Bloques disponibles (30 min)</span>
+            <span class="badge-legend"><span class="dot green"></span> Con cupo</span>
+            <span class="badge-legend"><span class="dot red"></span> Completo (6/6)</span>
+          </div>
+
+          <div id="candidate-slots-grid" class="candidate-slots-grid">
+            <!-- Renderizado dinámico -->
+          </div>
+
+          <div id="slot-selection-summary" class="slot-selected-card is-hidden">
+            <div class="summary-row">
+              <div>
+                <span class="sum-title">Turno Seleccionado</span>
+                <p class="sum-val" id="selected-slot-text">--</p>
+              </div>
+              <div class="sum-places" id="selected-slot-capacity">Cupo libre</div>
+            </div>
+          </div>
+
+          <div class="form-actions dual-actions">
+            <button type="button" id="btn-back-step-2" class="btn btn-ghost">Atrás</button>
+            <button type="button" id="btn-confirm-registration" class="btn btn-accent" disabled>
+              Confirmar Mi Asistencia
+            </button>
+          </div>
+        </div>
+
+        <!-- Paso 4: Éxito / Confirmación -->
+        <div id="step-success" class="step-content step-success-panel">
+          <div class="slot" data-slot="bienvenida-equipo" data-desc="Candidatos seleccionados integrándose al equipo"></div>
+
+          <div class="success-badge-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h2 class="success-title">¡Inscripción Confirmada!</h2>
+          <p class="success-desc">Tu vacante grupal quedó reservada. Te esperamos 10 minutos antes de la hora fijada con tu DNI físico.</p>
+
+          <div class="ticket-card" id="success-ticket-summary">
+            <!-- Detalle inyectado -->
+          </div>
+
+          <button type="button" id="btn-new-registration" class="btn btn-primary btn-block">
+            Inscribir a Otro Candidato
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA ADMIN / EVALUADOR (Desktop Optimizado) -->
+    <section id="admin-view" class="view-panel">
+      <div class="admin-shell">
+        <div class="slot" data-slot="salon-entrevistas" data-desc="Espacio de entrevistas grupales con mesas de evaluación preparadas"></div>
+
+        <div class="admin-toolbar">
+          <div class="admin-headings">
+            <div class="tag-admin-badge">MODO ENTREVISTADOR</div>
+            <h2 class="admin-title">Gestión de Mesas y Evaluación en Vivo</h2>
+            <p class="admin-subtitle">Supervisa las reuniones grupales de hasta 6 postulantes simultáneos y registra notas individuales.</p>
+          </div>
+
+          <div class="admin-controls-bar">
+            <div class="ctrl-item">
+              <label for="admin-date-picker">Fecha de Entrevistas</label>
+              <input type="date" id="admin-date-picker" class="styled-date-input">
+            </div>
+            <div class="ctrl-item">
+              <label for="admin-time-select">Bloque Horario (30 min)</label>
+              <div class="select-wrapper">
+                <select id="admin-time-select">
+                  <!-- Llenado dinámico -->
+                </select>
+              </div>
+            </div>
+            <div class="ctrl-item stats-pill" id="admin-slot-stat-pill">
+              <span class="stat-num" id="admin-current-count">0 / 6</span>
+              <span class="stat-text">Inscritos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header de la reunión actual -->
+        <div class="meeting-status-card">
+          <div class="meeting-info-left">
+            <div class="pulse-indicator"></div>
+            <div>
+              <h3 id="meeting-header-title" class="meeting-title">Sesión de Entrevista Grupal</h3>
+              <span id="meeting-header-sub" class="meeting-sub">Cargando candidatos del bloque...</span>
+            </div>
+          </div>
+          <div class="meeting-quick-actions">
+            <button id="btn-quick-sample-fill" class="btn btn-ghost btn-sm" title="Carga datos de prueba">
+              + Añadir Candidatos Demo al Bloque
+            </button>
+            <button id="btn-reset-db" class="btn btn-outline btn-sm" title="Reinicia los datos a estado inicial">
+              Restablecer Demo
+            </button>
+          </div>
+        </div>
+
+        <!-- Grilla Simultánea de 6 Candidatos -->
+        <div class="simultaneous-grid-container">
+          <div id="admin-candidates-grid" class="candidates-simultaneous-grid">
+            <!-- Renderizado dinámico de tarjetas -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Demo Funcional Supabase Mock Architecture &bull; Sistema de Entrevistas Grupales con Cupo Limitado</p>
+  </footer>
+
+  <div id="toast" class="toast is-hidden" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
